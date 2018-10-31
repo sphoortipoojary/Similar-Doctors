@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js"></script-->
+<body>
+<center>
+<div class="top">
+ <a href="#">Similar Doctors</a>
+</div>
+
+<div class="content" ng-app="myApp" ng-controller="namesCtrl">
+
+  Search for Doctors based on :
+  State :
+
+<!-- State dropdown -->
+<select ng-model="selectedValue" ng-options="x.state for x in names | unique:'state'" value="{{x.state}}">
+
+</select>
+
+<!-- Specialty dropdown -->
+  Specialty :
+  <select ng-model="specialtySelect" ng-options="x.specialty for x in names | unique:'specialty'" value="{{x.specialty}}">
+
+  </select>
+
+<br><br>
+
+<!-- Table containing list of all doctors -->
+  <table class="tbl">
+
+    <tr>
+
+          <th>ID</th>
+          <th>Doctor's name</th>
+          <th>State</th>
+          <th>Specialty</th>
+          <th>Review score</th>
+          <th></th>
+
+      </tr>
+
+    <tr ng-repeat="x in names |  filter : {specialty : specialtySelect.specialty, state : selectedValue.state}">
+
+      <td>{{x.id}}</td>
+      <td>{{ x.name }}</td>
+      <td>{{ x.state }}</td>
+      <td>{{x.specialty}}</td>
+      <td>{{ x.review_score }}</td>
+      <td><button ng-click="clicked(x)">View</button></td>
+    </tr>
+  </table>
+
+<!-- Description of record viewed -->
+<h3 ng-show="show">Your search results : </h3>
+<br><br>
+<table class="description" ng-show="show">
+<tr><td> Name : </td><td> {{iden.name}}</td></tr>
+<tr><td> Organization: </td><td>{{iden.organization}}</td></tr>
+<tr><td> State:</td><td> {{iden.state}}</td></tr>
+<tr><td> Specialty: </td><td>{{iden.specialty}}</td></tr>
+<tr><td> Review Score: </td><td>{{iden.review_score}}</td></tr>
+</table>
+<br>
+
+<!-- Similar doctors results : Doctors having similar specialty and ordered based on review scores are displayed -->
+
+-->
+<h3 ng-show="show"> Similar to your search : </h3>
+<table class="tbl2" ng-show="show">
+
+  <tr>
+
+    <th>ID</th>
+    <th>Doctor's name</th>
+    <th>State</th>
+    <th>Specialty</th>
+    <th>Review score</th>
+    <th></th>
+
+    </tr>
+
+  <tr ng-repeat="x in names | orderBy : 'review_score':true | filter : specialty=iden.specialty:true | limitTo:5">
+    <td>{{x.id}}</td>
+    <td>{{ x.name }}</td>
+    <td>{{ x.state }}</td>
+    <td>{{x.specialty}}</td>
+    <td>{{ x.review_score }}</td>
+    <td><button ng-click="clicked(x)">View</button></td>
+  </tr>
+</table>
+
+</div>
+</center>
+<script src="controllers.js"></script>
+<script src="unique.js"></script>
+</script>
+</body>
+</html>
